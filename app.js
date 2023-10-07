@@ -1,19 +1,18 @@
 const express = require('express');
 const app = express();
-const port = 5500; // You can use any port you prefer
+const port = 5500; 
 
-// Define middleware and routes here
+//middleware
 
 const axios = require('axios');
 const _ = require('lodash');
 
-// Middleware for analyzing blog data
+// analyzing blog data
 app.use('/api/blog', async (req, res, next) => {
   try {
-    // Fetch data from the third-party API (replace with your API URL)
     const response = await axios.get('https://api/blog-stats');
 
-    // Process and analyze the data using Lodash (replace with your analysis logic)
+    // analyzing the data using Lodash
     const totalBlogs = blogData.length;
     const longestTitleBlog = _.maxBy(blogData, (blog) => blog.title.length);
     const uniqueTitles = _.uniqBy(blogData, 'title');
@@ -22,7 +21,7 @@ app.use('/api/blog', async (req, res, next) => {
 );
 const numBlogsWordPrivacy = blogsWordPrivacy.length;
 
-    // Attach the analysis to the request object for use in routes
+    // Attaching the analysis
     req.blogAnalytics = {
       totalBlogs,
       longestTitleBlog,
@@ -30,18 +29,18 @@ const numBlogsWordPrivacy = blogsWordPrivacy.length;
       numBlogsWordPrivacy
     };
 
-    next(); // Proceed to the next middleware or route
+    next();
   } catch (error) {
-    next(error); // Pass any errors to the error handler
+    next(error); // error handler
   }
 });
 
-// Add a route for blog search
+// blog search
 app.get('/api/blog-search', (req, res) => {
   const { query } = req.query;
-  const blogData = req.blogAnalytics; // Access the analyzed data from middleware
+  const blogData = req.blogAnalytics; // Accessing the analyzed data from middleware
 
-  // Filter the blog data by title containing the query string (case-insensitive)
+  // Filter the blog data by title containing the query string
   const matchingBlogs = blogData.filter((blog) =>
     blog.title.toLowerCase().includes(query.toLowerCase())
   );
